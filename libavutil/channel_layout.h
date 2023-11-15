@@ -104,16 +104,23 @@ enum AVChannel {
     AV_CHAN_AMBISONIC_END  = 0x7ff,
 };
 
+/**
+ * 
+ * AVChannelLayout是FFmpeg中的一个关键结构体，它定义了音频数据的通道布局。通道布局是指音频数据中的通道按照特定的顺序排列，这对于音频的解码和编码过程至关重要。
+ * 
+*/
 enum AVChannelOrder {
     /**
      * Only the channel count is specified, without any further information
      * about the channel order.
+     * 未指定的通道顺序，此时AVChannelLayout只携带通道数量信息，不包含具体的通道顺序。
      */
     AV_CHANNEL_ORDER_UNSPEC,
     /**
      * The native channel order, i.e. the channels are in the same order in
      * which they are defined in the AVChannel enum. This supports up to 63
      * different channels.
+     * 原生通道顺序，即音频数据中的通道顺序与音频文件中的通道顺序相同。
      */
     AV_CHANNEL_ORDER_NATIVE,
     /**
@@ -143,11 +150,12 @@ enum AVChannelOrder {
      * @endcode
      *
      * Normalization is assumed to be SN3D (Schmidt Semi-Normalization)
+     * 原生通道顺序，即音频数据中的通道顺序与音频文件中的通道顺序相同。
      * as defined in AmbiX format $ 2.1.
      */
     AV_CHANNEL_ORDER_AMBISONIC,
 };
-
+ 
 
 /**
  * @defgroup channel_masks Audio channel masks
@@ -307,6 +315,8 @@ typedef struct AVChannelLayout {
 
     /**
      * Number of channels in this layout. Mandatory field.
+     * 音频通道个数。nb_channels的值必须与AVChannelLayout中的其他字段相对应。例如，如果通道顺序（order）是AV_CHANNEL_ORDER_NATIVE，
+     * 那么位掩码（mask）中的位数（即设置为1的位的数量）必须与nb_channels的值相等。这是因为每一个设置为1的位都表示一个存在的通道
      */
     int nb_channels;
 
@@ -329,6 +339,10 @@ typedef struct AVChannelLayout {
          * modified manually (i.e.  not using any of the av_channel_layout_*
          * functions), the code doing it must ensure that the number of set bits
          * is equal to nb_channels.
+         * 
+         * 当通道顺序为AV_CHANNEL_ORDER_NATIVE或AV_CHANNEL_ORDER_AMBISONIC时，
+         * 我们需要使用mask来表示哪些通道存在于音频数据中。mask是一个64位的整数，
+         * 每一位都对应一个特定的通道。如果某一位被设置为1，那么对应的通道就存在于音频数据中。
          */
         uint64_t mask;
         /**
@@ -348,6 +362,12 @@ typedef struct AVChannelLayout {
          * map[i].name may be filled with a 0-terminated string, in which case
          * it will be used for the purpose of identifying the channel with the
          * convenience functions below. Otherise it must be zeroed.
+         * 当通道顺序为AV_CHANNEL_ORDER_CUSTOM时，我们需要使用map来表示音频数据中的通道顺序。
+         * map是一个指向AVChannelCustom结构体的指针
+         * ，AVChannelCustom结构体中包含了通道的标识符（id）和名称（name）。
+         * 例如，如果我们正在处理一个自定义的音频格式，可能包含一个人声通道（AV_CHAN_VOICE）
+         * 和一个背景音乐通道（AV_CHAN_MUSIC），那么我们可以通过map来表示这种通道顺序。
+
          */
         AVChannelCustom *map;
     } u;

@@ -86,6 +86,9 @@ static const AVClass av_codec_context_class = {
     .get_category            = get_category,
 };
 
+/**
+ * 主要设置
+*/
 static int init_context_defaults(AVCodecContext *s, const AVCodec *codec)
 {
     const FFCodec *const codec2 = ffcodec(codec);
