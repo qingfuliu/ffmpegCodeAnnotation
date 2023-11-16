@@ -484,6 +484,10 @@ static int set_string_channel_layout(void *obj, const AVOption *o,
     return av_channel_layout_from_string(channel_layout, val);
 }
 
+/**
+ * AVCodecContext *s:
+ *  
+*/
 int av_opt_set(void *obj, const char *name, const char *val, int search_flags)
 {
     int ret = 0;

@@ -69,7 +69,10 @@ AVPacket *av_packet_alloc(void)
 
     return pkt;
 }
-
+/**
+ * 首先对 AVPacket 解引用
+ * 然后调用 av_freep 进行清除
+*/
 void av_packet_free(AVPacket **pkt)
 {
     if (!pkt || !*pkt)
@@ -382,6 +385,10 @@ int av_packet_shrink_side_data(AVPacket *pkt, enum AVPacketSideDataType type,
     return AVERROR(ENOENT);
 }
 
+/**
+ * 复制成员
+ * 复制 side_data，主要通过循环调用 av_packet_new_side_data 附加在结尾
+*/
 int av_packet_copy_props(AVPacket *dst, const AVPacket *src)
 {
     int i, ret;
@@ -426,7 +433,10 @@ void av_packet_unref(AVPacket *pkt)
     av_buffer_unref(&pkt->buf);
     get_packet_defaults(pkt);
 }
-
+/**
+ * 首先复制基础成员和side data
+ * 然后复制buf（分为直接分配和复制） 
+*/
 int av_packet_ref(AVPacket *dst, const AVPacket *src)
 {
     int ret;
@@ -462,7 +472,9 @@ fail:
     av_packet_unref(dst);
     return ret;
 }
-
+/**
+ * 首先调用 av_packet_alloc 分配一块内存并且初始化，然后调用 av_packet_ref 进行复制
+*/
 AVPacket *av_packet_clone(const AVPacket *src)
 {
     AVPacket *ret = av_packet_alloc();

@@ -35,6 +35,14 @@
  */
 #define BUFFER_FLAG_NO_FREE       (1 << 1)
 
+/**
+ * data: 缓冲区地址
+size: 缓冲区大小
+refcount: 引用计数值
+free: 用于释放缓冲区内存的回调函数
+opaque: 提供给 free 回调函数的参数
+flags: 缓冲区标志
+*/
 struct AVBuffer {
     uint8_t *data; /**< data described by this buffer */
     size_t size; /**< size of data in bytes */

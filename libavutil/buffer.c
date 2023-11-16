@@ -51,7 +51,11 @@ static AVBufferRef *buffer_create(AVBuffer *buf, uint8_t *data, size_t size,
 
     return ref;
 }
-
+/**
+ *1.首先分配一个 AVBuffer 结构体
+ *2.设置里面的变量为对应参数的变量
+ *3.分配一个  AVBufferRef 结构体，将 AVBuffer 挂载。然后设置其他变量
+*/
 AVBufferRef *av_buffer_create(uint8_t *data, size_t size,
                               void (*free)(void *opaque, uint8_t *data),
                               void *opaque, int flags)
@@ -69,11 +73,16 @@ AVBufferRef *av_buffer_create(uint8_t *data, size_t size,
     return ret;
 }
 
+/**
+ * 直接调用free(data)
+*/
 void av_buffer_default_free(void *opaque, uint8_t *data)
 {
     av_free(data);
 }
-
+/**
+ * 分配data的内存并且 调用 av_buffer_create
+*/
 AVBufferRef *av_buffer_alloc(size_t size)
 {
     AVBufferRef *ret = NULL;
@@ -89,7 +98,9 @@ AVBufferRef *av_buffer_alloc(size_t size)
 
     return ret;
 }
-
+/**
+ * 先调用 av_buffer_alloc，然后将data设置为0
+*/
 AVBufferRef *av_buffer_allocz(size_t size)
 {
     AVBufferRef *ret = av_buffer_alloc(size);
@@ -100,6 +111,9 @@ AVBufferRef *av_buffer_allocz(size_t size)
     return ret;
 }
 
+/**
+ * 分配一个新的 AVBufferRef，指向buf里面的内存，并且将其将引用计数原子加1
+*/
 AVBufferRef *av_buffer_ref(const AVBufferRef *buf)
 {
     AVBufferRef *ret = av_mallocz(sizeof(*ret));

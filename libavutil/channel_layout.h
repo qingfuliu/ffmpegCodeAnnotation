@@ -661,6 +661,7 @@ void av_channel_layout_default(AVChannelLayout *ch_layout, int nb_channels);
 const AVChannelLayout *av_channel_layout_standard(void **opaque);
 
 /**
+ * 重置；layout中的变量 （memset为0）
  * Free any allocated data in the channel layout and reset the channel
  * count to 0.
  *

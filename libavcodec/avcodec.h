@@ -2353,6 +2353,8 @@ const char *avcodec_license(void);
 
 /**
  * 为AVCodecContext分配内存空间，并且调用 init_context_defaults
+ * 最主要初始化了一下成员变量：
+ * 1. frametate、time_base、channel_layout
  * Allocate an AVCodecContext and set its fields to default values. The
  * resulting struct should be freed with avcodec_free_context().
  *

@@ -87,7 +87,9 @@ static const AVClass av_codec_context_class = {
 };
 
 /**
- * 主要设置
+ * 主要设置 基本变量 例如： feamerate、pix_fmt等
+ * 设置 codec中的default
+ * 设置 priv_data
 */
 static int init_context_defaults(AVCodecContext *s, const AVCodec *codec)
 {
@@ -152,7 +154,13 @@ FF_ENABLE_DEPRECATION_WARNINGS
     }
     return 0;
 }
-
+/**
+ * 1、分配内存
+ * 2、设置基本变量 将channel_layout设置为空、设置framerate、time_base、pkt_time_base、
+ * simple_fmt、pix_fmt、sample_aspect_ratio
+ * 3、将codec中default里面的kv键值对设置
+ * 4、分配 priv_data ，将 priv_data 指向 codec->priv_class 最后调用 av_opt_set_defaults 初始化codec->priv_class
+*/
 AVCodecContext *avcodec_alloc_context3(const AVCodec *codec)
 {
     AVCodecContext *avctx= av_malloc(sizeof(AVCodecContext));
