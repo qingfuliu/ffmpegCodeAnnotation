@@ -2413,39 +2413,22 @@ int avcodec_parameters_to_context(AVCodecContext *codec,
                                   const AVCodecParameters *par);
 
 /**
- * Initialize the AVCodecContext to use the given AVCodec. Prior to using this
- * function the context has to be allocated with avcodec_alloc_context3().
- *
- * The functions avcodec_find_decoder_by_name(), avcodec_find_encoder_by_name(),
- * avcodec_find_decoder() and avcodec_find_encoder() provide an easy way for
- * retrieving a codec.
- *
- * @note Always call this function before using decoding routines (such as
- * @ref avcodec_receive_frame()).
- *
- * @code
- * av_dict_set(&opts, "b", "2.5M", 0);
- * codec = avcodec_find_decoder(AV_CODEC_ID_H264);
- * if (!codec)
- *     exit(1);
- *
- * context = avcodec_alloc_context3(codec);
- *
- * if (avcodec_open2(context, codec, opts) < 0)
- *     exit(1);
- * @endcode
- *
- * @param avctx The context to initialize.
- * @param codec The codec to open this context for. If a non-NULL codec has been
- *              previously passed to avcodec_alloc_context3() or
- *              for this context, then this parameter MUST be either NULL or
- *              equal to the previously passed codec.
- * @param options A dictionary filled with AVCodecContext and codec-private options.
- *                On return this object will be filled with options that were not found.
- *
- * @return zero on success, a negative value on error
- * @see avcodec_alloc_context3(), avcodec_find_decoder(), avcodec_find_encoder(),
- *      av_dict_set(), av_opt_find().
+ * 首先判断是否满足下列条件
+ *      没有调用过该函数
+ *      avctx->codeC和codec相等
+ *      avctx->codec_type以及avctx->codec_id   和 codec 对应的成员相等
+ * 
+ * 分配一个AVCodecInternal，赋值给avctx->internal 
+ *      分配avctx->internal  的 buffer_frame、buffer_pkt 缓存
+ * 根据 codec2(codec 转化而来的FFCodec)的priv_data_size大小，分配 avctx->priv_data 
+ * 调用av_opt_set_dict循环options中的 av_opt_set
+ * 判断白名单是否符合
+ * 调用 av_image_check_size2 检查高度和宽度、调用 av_image_check_sar 检查、检查 avctx->sample_rate 大于0
+ * 检查音频相关：ch_layout必须被设置、av_channel_layout_check(&avctx->ch_layout)、avctx->ch_layout.nb_channels大小问题
+ * 如果时基没有被设置，那么根据采样率更新时基
+ * 根据视频或者音频、调用 ff_encode_preinit 或者 ff_decode_preinit
+ * 设置线程相关的东西
+ * 
  */
 int avcodec_open2(AVCodecContext *avctx, const AVCodec *codec, AVDictionary **options);
 

@@ -1744,6 +1744,9 @@ void av_opt_free(void *obj)
     }
 }
 
+/**
+ * 循环调用 av_opt_set
+*/
 int av_opt_set_dict2(void *obj, AVDictionary **options, int search_flags)
 {
     const AVDictionaryEntry *t = NULL;

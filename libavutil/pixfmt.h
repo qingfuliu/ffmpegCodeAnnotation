@@ -605,6 +605,7 @@ enum AVColorSpace {
 };
 
 /**
+ * YUV 的取值范围
  * Visual content value range.
  *
  * These values are based on definitions that can be found in multiple

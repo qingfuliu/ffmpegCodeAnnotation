@@ -58,6 +58,7 @@ typedef struct AVComponentDescriptor {
 } AVComponentDescriptor;
 
 /**
+ * 描述了一个像素格式的内容，例如一个
  * Descriptor that unambiguously describes how the bits of a pixel are
  * stored in the up to 4 data planes of an image. It also stores the
  * subsampling factors and number of components.

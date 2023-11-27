@@ -39,6 +39,9 @@ int av_dict_count(const AVDictionary *m)
     return m ? m->count : 0;
 }
 
+/**
+ * 迭代m
+*/
 const AVDictionaryEntry *av_dict_iterate(const AVDictionary *m,
                                          const AVDictionaryEntry *prev)
 {
